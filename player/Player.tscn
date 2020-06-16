@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/images/player.png" type="Texture" id=1]
+[ext_resource path="res://player/Player.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 5.61628
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 7.75764, 8.46161 )
+
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 53.9726, 60.9437 )
+collision_layer = 4
+collision_mask = 11
+script = ExtResource( 2 )
+
+[node name="BodyCollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+one_way_collision_margin = 0.0
+
+[node name="PlatformDetector" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformDetector"]
+position = Vector2( 0, -2.5 )
+shape = SubResource( 2 )
+
+[node name="Pivot" type="Position2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Pivot"]
+position = Vector2( 0, -10 )
+texture = ExtResource( 1 )
+vframes = 8
+hframes = 8
+
+[node name="JumpTimer" type="Timer" parent="."]
+wait_time = 0.35
+one_shot = true
+[connection signal="body_entered" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_entered"]
+[connection signal="body_exited" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_exited"]
+[connection signal="body_shape_exited" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_shape_exited"]
+[connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]
