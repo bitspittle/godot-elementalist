@@ -27,6 +27,7 @@ onready var _pivot = $Pivot
 onready var _platform_detector: Area2D = $PlatformDetector
 onready var _jump_timer: Timer = $JumpTimer
 onready var _anim: AnimationPlayer = $AnimationPlayer
+onready var _time = $TimeEffect
 
 var _tmp_start_pos: Vector2
 
@@ -54,6 +55,11 @@ func _process(delta):
 			_anim.play("idle")
 		
 		_state = _next_state
+		
+	if Input.is_action_just_pressed("player_cast"):
+		_time.scale(0.0)
+	elif Input.is_action_just_released("player_cast"):
+		_time.restore(0.0)
 		
 func _physics_process(delta):
 	var last_vel_y = _vel.y
