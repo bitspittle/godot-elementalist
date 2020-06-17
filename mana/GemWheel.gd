@@ -14,5 +14,8 @@ func _process(delta):
 		
 	elif Input.is_action_just_released("player_cast"):
 		_anim.play_backwards("in")
+		_anim.queue("hide") # No-op but used as a signal to unpause
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name == "hide":
 		get_tree().paused = false
-		

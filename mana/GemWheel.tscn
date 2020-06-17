@@ -3,7 +3,7 @@
 [ext_resource path="res://mana/Gem.tscn" type="PackedScene" id=1]
 [ext_resource path="res://mana/GemWheel.gd" type="Script" id=2]
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=1]
 resource_name = "hide"
 length = 0.001
 tracks/0/type = "value"
@@ -19,8 +19,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "in"
+[sub_resource type="Animation" id=2]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Pivot:rotation_degrees")
 tracks/0/interp = 1
@@ -74,6 +73,7 @@ tracks/3/keys = {
 script = ExtResource( 2 )
 
 [node name="Pivot" type="Position2D" parent="."]
+modulate = Color( 1, 1, 1, 0 )
 rotation = 6.28319
 
 [node name="Gem0" parent="Pivot" instance=ExtResource( 1 )]
@@ -102,5 +102,6 @@ position = Vector2( -20, -20 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 3.0
-anims/hide = SubResource( 2 )
-anims/in = SubResource( 1 )
+anims/hide = SubResource( 1 )
+anims/in = SubResource( 2 )
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

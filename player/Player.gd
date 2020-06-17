@@ -7,7 +7,7 @@ const GRAVITY = 1000
 const JUMP_FORCE = 150
 
 var SLOPE_THRESHOLD = deg2rad(46)
-var DEFAULT_SNAP_VECTOR = Vector2.DOWN * 100.0 # Make sure we snip hard if walking down sleep slopes
+var DEFAULT_SNAP_VECTOR = Vector2.DOWN * 40.0 # Make sure we snip hard if walking down sleep slopes
 
 enum State {
 	IDLE,
@@ -55,7 +55,7 @@ func _process(delta):
 			_anim.play("idle")
 		
 		_state = _next_state
-		
+
 func _physics_process(delta):
 	var last_vel_y = _vel.y
 	
@@ -98,7 +98,7 @@ func _physics_process(delta):
 			_next_state = State.DUCKING
 			_vel.x = 0
 			
-	elif _state == State.DUCKING && Input.is_action_just_released("player_down"):
+	elif _state == State.DUCKING && not Input.is_action_pressed("player_down"):
 		_next_state = State.IDLE
 	
 	if (!_jump_timer.is_stopped()):
