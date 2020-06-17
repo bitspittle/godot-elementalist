@@ -40,7 +40,7 @@ func _process(delta):
 	if Input.is_action_pressed("ui_cancel"):
 		_vel = Vector2.ZERO
 		position = _tmp_start_pos
-		set_collision_mask_bit(Constants.LAYER_PLATFORMS, true)
+		set_collision_mask_bit(Layers.PLATFORMS, true)
 		
 	if _state != _next_state:
 		if _next_state == State.IDLE:
@@ -63,7 +63,7 @@ func _process(delta):
 		
 func _physics_process(delta):
 	var last_vel_y = _vel.y
-	var tmp_last_collision_mask = get_collision_mask_bit(Constants.LAYER_PLATFORMS)
+	var tmp_last_collision_mask = get_collision_mask_bit(Layers.PLATFORMS)
 	
 	if _state != State.DUCKING:
 		var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
@@ -88,8 +88,8 @@ func _physics_process(delta):
 	if (_vel.y >= 0 && _state == State.JUMPING):
 		_next_state = State.FALLING
 
-	if (_vel.y >= 0 && !get_collision_mask_bit(Constants.LAYER_PLATFORMS) && _platform_detector.get_overlapping_bodies().empty()):
-		set_collision_mask_bit(Constants.LAYER_PLATFORMS, true)
+	if (_vel.y >= 0 && !get_collision_mask_bit(Layers.PLATFORMS) && _platform_detector.get_overlapping_bodies().empty()):
+		set_collision_mask_bit(Layers.PLATFORMS, true)
 
 	if Input.is_action_just_pressed("player_jump"):
 		if is_on_floor():
@@ -97,7 +97,7 @@ func _physics_process(delta):
 				_snap_vector = Vector2.ZERO
 				_jump_timer.start()
 				_next_state = State.JUMPING
-			set_collision_mask_bit(Constants.LAYER_PLATFORMS, false)
+			set_collision_mask_bit(Layers.PLATFORMS, false)
 
 	elif _state != State.DUCKING && Input.is_action_pressed("player_down"):
 		if is_on_floor():

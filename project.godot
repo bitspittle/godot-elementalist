@@ -21,7 +21,7 @@ config/icon="res://assets/images/icon.png"
 
 [autoload]
 
-Constants="*res://common/Constants.gd"
+Layers="*res://common/Layers.gd"
 
 [display]
 
