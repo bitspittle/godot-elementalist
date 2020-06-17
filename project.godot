@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "GemWheel",
+"language": "GDScript",
+"path": "res://mana/GemWheel.gd"
+}, {
+"base": "Control",
+"class": "PercentBar",
+"language": "GDScript",
+"path": "res://ui/PercentBar.gd"
+} ]
 _global_script_class_icons={
-
+"GemWheel": "",
+"PercentBar": ""
 }
 
 [application]
