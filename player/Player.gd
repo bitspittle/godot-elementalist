@@ -9,14 +9,26 @@ const JUMP_FORCE = 150
 var SLOPE_THRESHOLD = deg2rad(46)
 var DEFAULT_SNAP_VECTOR = Vector2.DOWN * 100.0 # Make sure we snip hard if walking down sleep slopes
 
+enum State {
+	IDLE,
+	WALKING,
+	FALLING,
+	JUMPING,
+}
+
 var _vel = Vector2.ZERO
 var _snap_vector = DEFAULT_SNAP_VECTOR
+
+var _state = State.IDLE
+var _next_state = State.IDLE
 
 onready var _pivot = $Pivot
 onready var _platform_detector: Area2D = $PlatformDetector
 onready var _jump_timer: Timer = $JumpTimer
+onready var _anim: AnimationPlayer = $AnimationPlayer
 
 var _tmp_start_pos: Vector2
+
 
 func _ready():
 	_tmp_start_pos = position
@@ -26,7 +38,14 @@ func _process(delta):
 		_vel = Vector2.ZERO
 		position = _tmp_start_pos
 		set_collision_mask_bit(Constants.LAYER_PLATFORMS, true)
-
+		
+	if _state != _next_state:
+		if _next_state == State.IDLE:
+			_anim.play("idle")
+		elif _next_state == State.WALKING:
+			_anim.play("walk")
+		
+		_state = _next_state
 
 func _physics_process(delta):
 	var last_vel_y = _vel.y
@@ -34,6 +53,7 @@ func _physics_process(delta):
 	var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
 
 	if x_input != 0:
+		_next_state = State.WALKING
 		if sign(x_input) != sign(_vel.x):
 			_vel.x = 0 # quick turnaround
 			_pivot.scale.x = sign(x_input)
@@ -42,6 +62,7 @@ func _physics_process(delta):
 		_vel.x = clamp(_vel.x, -MAX_SPEED, MAX_SPEED)
 
 	else:
+		_next_state = State.IDLE
 		_vel.x = 0
 
 	_vel.y += GRAVITY * delta
