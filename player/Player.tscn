@@ -1,13 +1,41 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/images/player.png" type="Texture" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 5.61628
+radius = 4.17412
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 7.75764, 8.46161 )
+
+[sub_resource type="Animation" id=5]
+resource_name = "duck"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 4 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
 
 [sub_resource type="Animation" id=3]
 resource_name = "idle"
@@ -89,15 +117,15 @@ shape = SubResource( 2 )
 [node name="Sprite" type="Sprite" parent="Pivot"]
 position = Vector2( 0, -10 )
 texture = ExtResource( 1 )
-hframes = 4
-frame = 2
+hframes = 5
+frame = 4
 
 [node name="JumpTimer" type="Timer" parent="."]
 wait_time = 0.35
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 8.0
+anims/duck = SubResource( 5 )
 anims/idle = SubResource( 3 )
 anims/walk = SubResource( 4 )
 [connection signal="body_entered" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_entered"]

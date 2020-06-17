@@ -11,6 +11,7 @@ var DEFAULT_SNAP_VECTOR = Vector2.DOWN * 100.0 # Make sure we snip hard if walki
 
 enum State {
 	IDLE,
+	DUCKING,
 	WALKING,
 	FALLING,
 	JUMPING,
@@ -31,6 +32,7 @@ var _tmp_start_pos: Vector2
 
 
 func _ready():
+	_anim.play("idle")
 	_tmp_start_pos = position
 	
 func _process(delta):
@@ -44,41 +46,60 @@ func _process(delta):
 			_anim.play("idle")
 		elif _next_state == State.WALKING:
 			_anim.play("walk")
+		elif _next_state == State.DUCKING:
+			_anim.play("duck")
+		elif _next_state == State.JUMPING:
+			_anim.play("idle")
+		elif _next_state == State.FALLING:
+			_anim.play("idle")
 		
 		_state = _next_state
-
+		
 func _physics_process(delta):
 	var last_vel_y = _vel.y
 	var tmp_last_collision_mask = get_collision_mask_bit(Constants.LAYER_PLATFORMS)
-	var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
-
-	if x_input != 0:
-		_next_state = State.WALKING
-		if sign(x_input) != sign(_vel.x):
-			_vel.x = 0 # quick turnaround
-			_pivot.scale.x = sign(x_input)
-
-		_vel.x += x_input * ACCELERATION * delta
-		_vel.x = clamp(_vel.x, -MAX_SPEED, MAX_SPEED)
-
-	else:
-		_next_state = State.IDLE
-		_vel.x = 0
+	
+	if _state != State.DUCKING:
+		var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
+		if x_input != 0:
+			_next_state = State.WALKING
+			if sign(x_input) != sign(_vel.x):
+				_vel.x = 0 # quick turnaround
+				_pivot.scale.x = sign(x_input)
+	
+			_vel.x += x_input * ACCELERATION * delta
+			_vel.x = clamp(_vel.x, -MAX_SPEED, MAX_SPEED)
+	
+		else:
+			_next_state = State.IDLE
+			_vel.x = 0
 
 	_vel.y += GRAVITY * delta
 	_vel.y = move_and_slide_with_snap(_vel, _snap_vector, Vector2.UP, true, 4, SLOPE_THRESHOLD).y
 	_snap_vector = DEFAULT_SNAP_VECTOR
 
 	# Re-enable platforms as long as we're fallling and aren't currently intersecting with anything
+	if (_vel.y >= 0 && _state == State.JUMPING):
+		_next_state = State.FALLING
+
 	if (_vel.y >= 0 && !get_collision_mask_bit(Constants.LAYER_PLATFORMS) && _platform_detector.get_overlapping_bodies().empty()):
 		set_collision_mask_bit(Constants.LAYER_PLATFORMS, true)
 
 	if Input.is_action_just_pressed("player_jump"):
 		if is_on_floor():
-			if not Input.is_action_pressed("player_down"):
+			if not _state == State.DUCKING:
 				_snap_vector = Vector2.ZERO
 				_jump_timer.start()
+				_next_state = State.JUMPING
 			set_collision_mask_bit(Constants.LAYER_PLATFORMS, false)
+
+	elif _state != State.DUCKING && Input.is_action_pressed("player_down"):
+		if is_on_floor():
+			_next_state = State.DUCKING
+			_vel.x = 0
+			
+	elif _state == State.DUCKING && Input.is_action_just_released("player_down"):
+		_next_state = State.IDLE
 	
 	if (!_jump_timer.is_stopped()):
 		if Input.is_action_pressed("player_jump"):
