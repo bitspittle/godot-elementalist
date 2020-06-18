@@ -20,3 +20,4 @@ position = Vector2( 167.591, 89.2396 )
 
 [node name="GemCharge" parent="." instance=ExtResource( 3 )]
 position = Vector2( 76.1081, 52.4346 )
+z_index = 20
