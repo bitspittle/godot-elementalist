@@ -32,7 +32,7 @@ config/icon="res://assets/images/icon.png"
 
 [autoload]
 
-Layers="*res://common/Layers.gd"
+Layers="*res://engine/Layers.gd"
 
 [display]
 
