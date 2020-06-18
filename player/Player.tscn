@@ -125,6 +125,14 @@ material = SubResource( 3 )
 position = Vector2( 0, -10 )
 texture = ExtResource( 1 )
 hframes = 5
+frame = 4
+
+[node name="Camera2D" type="Camera2D" parent="Pivot"]
+position = Vector2( 20, 0 )
+current = true
+smoothing_enabled = true
+smoothing_speed = 2.0
+editor_draw_drag_margin = true
 
 [node name="JumpTimer" type="Timer" parent="."]
 wait_time = 0.35

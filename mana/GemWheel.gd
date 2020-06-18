@@ -6,9 +6,9 @@ onready var _anim = $AnimationPlayer
 
 enum State {
 	HIDDEN,
-	SHOWING,
+	ANIMATING_IN,
 	SHOWN,
-	HIDING
+	ANIMATING_OUT,
 }
 
 var _state = State.HIDDEN
@@ -36,13 +36,14 @@ func _ready():
 	_gemNW.color = GameColors.LIFE
 
 func _process(_delta):
-	if Input.is_action_just_pressed("player_cast"):
+	if _state == State.HIDDEN && Input.is_action_just_pressed("player_cast"):
 		get_tree().paused = true
-		_state = State.SHOWING
+		_cursor_pos = Vector2.ZERO
+		_state = State.ANIMATING_IN
 		_anim.play("in")
 		
-	elif Input.is_action_just_released("player_cast"):
-		_state = State.HIDING
+	elif _state == State.SHOWN && not Input.is_action_pressed("player_cast"):
+		_state = State.ANIMATING_OUT
 		_anim.play_backwards("in")
 		_anim.queue("hide") # No-op but used as a signal to unpause
 		
@@ -62,10 +63,9 @@ func _process(_delta):
 
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "in": # Could be from playing forwards OR backwards...
-		if _state == State.SHOWING:
+		if _state == State.ANIMATING_IN:
 			_state = State.SHOWN
 		
 	elif anim_name == "hide":
 		get_tree().paused = false
 		_state = State.HIDDEN
-		_cursor_pos = Vector2.ZERO

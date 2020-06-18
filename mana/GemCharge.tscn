@@ -15,3 +15,6 @@ margin_left = 8.0
 margin_top = -3.0
 margin_right = 28.0
 margin_bottom = 3.0
+fill_color = Color( 1, 1, 1, 1 )
+empty_color = Color( 0.2, 0.2, 0.2, 1 )
+border_width = 1

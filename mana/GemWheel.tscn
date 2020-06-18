@@ -4,24 +4,23 @@
 [ext_resource path="res://mana/GemWheel.gd" type="Script" id=2]
 [ext_resource path="res://assets/images/gem-select.png" type="Texture" id=3]
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 22, 22 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 3 )
 region = Rect2( 22, 0, 22, 22 )
 
-[sub_resource type="SpriteFrames" id=5]
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
-"frames": [ SubResource( 3 ), SubResource( 4 ) ],
+"frames": [ SubResource( 1 ), SubResource( 2 ) ],
 "loop": true,
 "name": "pulse",
 "speed": 2.0
 } ]
 
-[sub_resource type="Animation" id=1]
-resource_name = "hide"
+[sub_resource type="Animation" id=4]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/path = NodePath("Pivot:modulate")
@@ -60,7 +59,7 @@ tracks/2/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=5]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Pivot:rotation_degrees")
 tracks/0/interp = 1
@@ -118,7 +117,7 @@ tracks/4/enabled = true
 tracks/4/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
-"update": 1,
+"update": 0,
 "values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.588235 ) ]
 }
 tracks/5/type = "value"
@@ -153,9 +152,9 @@ __meta__ = {
 }
 
 [node name="Pivot" type="Position2D" parent="."]
-modulate = Color( 1, 1, 1, 0.9 )
-rotation = 5.96903
-scale = Vector2( 0.96, 0.96 )
+modulate = Color( 1, 1, 1, 0 )
+rotation = 3.14159
+scale = Vector2( 0.6, 0.6 )
 
 [node name="GemN" parent="Pivot" instance=ExtResource( 1 )]
 position = Vector2( 0, -28 )
@@ -183,12 +182,12 @@ position = Vector2( -20, -20 )
 
 [node name="Cursor" type="AnimatedSprite" parent="."]
 visible = false
-frames = SubResource( 5 )
+frames = SubResource( 3 )
 animation = "pulse"
 playing = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 5.0
-anims/hide = SubResource( 1 )
-anims/in = SubResource( 2 )
+anims/hide = SubResource( 4 )
+anims/in = SubResource( 5 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
