@@ -4,26 +4,68 @@ class_name GemWheel
 
 onready var _anim = $AnimationPlayer
 
+enum State {
+	HIDDEN,
+	SHOWING,
+	SHOWN,
+	HIDING
+}
+
+var _state = State.HIDDEN
+var _cursor_pos = Vector2.ZERO
+
+onready var _gemN = $Pivot/GemN
+onready var _gemNE = $Pivot/GemNE
+onready var _gemE = $Pivot/GemE
+onready var _gemSE = $Pivot/GemSE
+onready var _gemS = $Pivot/GemS
+onready var _gemSW = $Pivot/GemSW
+onready var _gemW = $Pivot/GemW
+onready var _gemNW = $Pivot/GemNW
+onready var _cursor = $Cursor
+
 func _ready():
 	_anim.play("hide")
-	$Pivot/GemN.color = GameColors.WATER
-	$Pivot/GemNE.color = GameColors.LIGHTNING
-	$Pivot/GemE.color = GameColors.AIR
-	$Pivot/GemSE.color = GameColors.STONE
-	$Pivot/GemS.color = GameColors.FIRE
-	$Pivot/GemSW.color = GameColors.POISON
-	$Pivot/GemW.color = GameColors.NATURE
-	$Pivot/GemNW.color = GameColors.LIFE
+	_gemN.color = GameColors.WATER
+	_gemNE.color = GameColors.LIGHTNING
+	_gemE.color = GameColors.AIR
+	_gemSE.color = GameColors.STONE
+	_gemS.color = GameColors.FIRE
+	_gemSW.color = GameColors.POISON
+	_gemW.color = GameColors.NATURE
+	_gemNW.color = GameColors.LIFE
 
 func _process(_delta):
 	if Input.is_action_just_pressed("player_cast"):
 		get_tree().paused = true
+		_state = State.SHOWING
 		_anim.play("in")
 		
 	elif Input.is_action_just_released("player_cast"):
+		_state = State.HIDING
 		_anim.play_backwards("in")
 		_anim.queue("hide") # No-op but used as a signal to unpause
+		
+	if _state == State.SHOWN:
+		var cursor_pos = Vector2(
+			Input.get_action_strength("player_right") - Input.get_action_strength("player_left"),
+			Input.get_action_strength("player_down") - Input.get_action_strength("player_up")
+		).normalized() * _gemE.position.x
+		
+		if _cursor_pos != cursor_pos:
+			_cursor_pos = cursor_pos
+			if _cursor_pos != Vector2.ZERO:
+				_cursor.visible = true
+				_cursor.position = _cursor_pos
+			else:
+				_cursor.visible = false
 
 func _on_AnimationPlayer_animation_finished(anim_name):
-	if anim_name == "hide":
+	if anim_name == "in": # Could be from playing forwards OR backwards...
+		if _state == State.SHOWING:
+			_state = State.SHOWN
+		
+	elif anim_name == "hide":
 		get_tree().paused = false
+		_state = State.HIDDEN
+		_cursor_pos = Vector2.ZERO
