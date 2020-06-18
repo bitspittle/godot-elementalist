@@ -33,6 +33,7 @@ config/icon="res://assets/images/icon.png"
 [autoload]
 
 Layers="*res://engine/Layers.gd"
+GameColors="*res://common/GameColors.gd"
 
 [display]
 

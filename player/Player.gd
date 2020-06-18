@@ -36,7 +36,7 @@ func _ready():
 	_anim.play("idle")
 	_tmp_start_pos = position
 	
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_pressed("ui_cancel"):
 		_vel = Vector2.ZERO
 		position = _tmp_start_pos
@@ -57,8 +57,6 @@ func _process(delta):
 		_state = _next_state
 
 func _physics_process(delta):
-	var last_vel_y = _vel.y
-	
 	if _state != State.DUCKING:
 		var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
 		if x_input != 0:

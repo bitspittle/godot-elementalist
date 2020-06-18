@@ -6,8 +6,16 @@ onready var _anim = $AnimationPlayer
 
 func _ready():
 	_anim.play("hide")
+	$Pivot/GemN.color = GameColors.WATER
+	$Pivot/GemNE.color = GameColors.LIGHTNING
+	$Pivot/GemE.color = GameColors.AIR
+	$Pivot/GemSE.color = GameColors.STONE
+	$Pivot/GemS.color = GameColors.FIRE
+	$Pivot/GemSW.color = GameColors.POISON
+	$Pivot/GemW.color = GameColors.NATURE
+	$Pivot/GemNW.color = GameColors.LIFE
 
-func _process(delta):
+func _process(_delta):
 	if Input.is_action_just_pressed("player_cast"):
 		get_tree().paused = true
 		_anim.play("in")

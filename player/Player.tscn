@@ -140,7 +140,3 @@ anims/walk = SubResource( 6 )
 [node name="GemWheel" parent="." instance=ExtResource( 4 )]
 pause_mode = 2
 position = Vector2( 0.062645, 0 )
-[connection signal="body_entered" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_entered"]
-[connection signal="body_exited" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_exited"]
-[connection signal="body_shape_exited" from="PlatformDetector" to="." method="_on_PlatformPassThru_body_shape_exited"]
-[connection signal="timeout" from="JumpTimer" to="." method="_on_JumpTimer_timeout"]
