@@ -13,8 +13,9 @@ enum State {
 	IDLE,
 	DUCKING,
 	WALKING,
-	FALLING,
 	JUMPING,
+	FALLING,
+	LANDING,
 }
 
 var _vel = Vector2.ZERO
@@ -37,7 +38,7 @@ func _ready():
 	_tmp_start_pos = position
 	
 func _process(_delta):
-	if Input.is_action_pressed("ui_cancel"):
+	if Input.is_action_pressed("ui_cancel") or position.y > 500:
 		_vel = Vector2.ZERO
 		position = _tmp_start_pos
 		set_collision_mask_bit(Layers.PLATFORMS, true)
@@ -50,9 +51,11 @@ func _process(_delta):
 		elif _next_state == State.DUCKING:
 			_anim.play("duck")
 		elif _next_state == State.JUMPING:
-			_anim.play("idle")
+			_anim.play("jump")
 		elif _next_state == State.FALLING:
-			_anim.play("idle")
+			_anim.play("fall")
+		elif _next_state == State.LANDING:
+			_anim.play("land")
 		
 		_state = _next_state
 
@@ -60,7 +63,9 @@ func _physics_process(delta):
 	if _state != State.DUCKING:
 		var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
 		if x_input != 0:
-			_next_state = State.WALKING
+			if _state == State.IDLE:
+				_next_state = State.WALKING
+
 			if sign(x_input) != sign(_vel.x):
 				_vel.x = 0 # quick turnaround
 				_pivot.scale.x = sign(x_input)
@@ -69,7 +74,8 @@ func _physics_process(delta):
 			_vel.x = clamp(_vel.x, -MAX_SPEED, MAX_SPEED)
 	
 		else:
-			_next_state = State.IDLE
+			if _state == State.WALKING:
+				_next_state = State.IDLE
 			_vel.x = 0
 
 	_vel.y += GRAVITY * delta
@@ -77,7 +83,7 @@ func _physics_process(delta):
 	_snap_vector = DEFAULT_SNAP_VECTOR
 
 	# Re-enable platforms as long as we're fallling and aren't currently intersecting with anything
-	if (_vel.y >= 0 && _state == State.JUMPING):
+	if (_vel.y >= 0 && _state != State.FALLING && not is_on_floor()):
 		_next_state = State.FALLING
 
 	if (_vel.y >= 0 && !get_collision_mask_bit(Layers.PLATFORMS) && _platform_detector.get_overlapping_bodies().empty()):
@@ -98,6 +104,9 @@ func _physics_process(delta):
 			
 	elif _state == State.DUCKING && not Input.is_action_pressed("player_down"):
 		_next_state = State.IDLE
+		
+	elif _state == State.FALLING && is_on_floor():
+		_next_state = State.LANDING
 	
 	if (!_jump_timer.is_stopped()):
 		if Input.is_action_pressed("player_jump"):
@@ -105,3 +114,7 @@ func _physics_process(delta):
 		else:
 			_jump_timer.stop()
 
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim_name == "land":
+		_next_state = State.IDLE
