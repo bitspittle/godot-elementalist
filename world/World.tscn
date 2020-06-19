@@ -21,5 +21,6 @@ position = Vector2( 167.505, 89.2396 )
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="GemCharge" parent="UI" instance=ExtResource( 3 )]
+visible = false
 position = Vector2( 14.0558, 12.7538 )
 z_index = 20

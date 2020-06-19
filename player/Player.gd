@@ -16,6 +16,8 @@ enum State {
 	JUMPING,
 	FALLING,
 	LANDING,
+	WINDING,
+	ATTACKING,
 }
 
 var _vel = Vector2.ZERO
@@ -36,13 +38,13 @@ var _tmp_start_pos: Vector2
 func _ready():
 	_anim.play("idle")
 	_tmp_start_pos = position
-	
+
 func _process(_delta):
 	if Input.is_action_pressed("ui_cancel") or position.y > 500:
 		_vel = Vector2.ZERO
 		position = _tmp_start_pos
 		set_collision_mask_bit(Layers.PLATFORMS, true)
-		
+
 	if _state != _next_state:
 		if _next_state == State.IDLE:
 			_anim.play("idle")
@@ -56,7 +58,11 @@ func _process(_delta):
 			_anim.play("fall")
 		elif _next_state == State.LANDING:
 			_anim.play("land")
-		
+		elif _next_state == State.WINDING:
+			_anim.play("wind")
+		elif _next_state == State.ATTACKING:
+			_anim.play("attack")
+
 		_state = _next_state
 
 func _physics_process(delta):
@@ -69,10 +75,10 @@ func _physics_process(delta):
 			if sign(x_input) != sign(_vel.x):
 				_vel.x = 0 # quick turnaround
 				_pivot.scale.x = sign(x_input)
-	
+
 			_vel.x += x_input * ACCELERATION * delta
 			_vel.x = clamp(_vel.x, -MAX_SPEED, MAX_SPEED)
-	
+
 		else:
 			if _state == State.WALKING:
 				_next_state = State.IDLE
@@ -101,13 +107,19 @@ func _physics_process(delta):
 		if is_on_floor():
 			_next_state = State.DUCKING
 			_vel.x = 0
-			
+
 	elif _state == State.DUCKING && not Input.is_action_pressed("player_down"):
 		_next_state = State.IDLE
-		
+
 	elif _state == State.FALLING && is_on_floor():
 		_next_state = State.LANDING
-	
+
+	elif (_state == State.IDLE || _state == State.WALKING || _state == State.ATTACKING || _state == State.LANDING) && Input.is_action_just_pressed("player_attack"):
+		_next_state = State.WINDING
+
+	elif _state == State.WINDING && Input.is_action_just_released("player_attack"):
+		_next_state = State.ATTACKING
+
 	if (!_jump_timer.is_stopped()):
 		if Input.is_action_pressed("player_jump"):
 			_vel.y = -JUMP_FORCE
@@ -116,5 +128,5 @@ func _physics_process(delta):
 
 
 func _on_AnimationPlayer_animation_finished(anim_name):
-	if anim_name == "land":
+	if anim_name == "land" or anim_name == "attack":
 		_next_state = State.IDLE

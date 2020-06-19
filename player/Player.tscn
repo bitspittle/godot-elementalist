@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/images/player.png" type="Texture" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
@@ -7,7 +7,7 @@
 [ext_resource path="res://assets/shaders/module_range.shader" type="Shader" id=5]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 4.17412
+radius = 5.08875
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 7.75764, 8.46161 )
@@ -17,6 +17,34 @@ shader = ExtResource( 5 )
 shader_param/color_range_start = Vector3( 0.3, 0.3, 0.3 )
 shader_param/color_range_end = Vector3( 1, 1, 1 )
 shader_param/color_modulate = Plane( 1, 0, 1, 1 )
+
+[sub_resource type="Animation" id=10]
+resource_name = "attack"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 0.9, 1.4, 4.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 19, 20, 21, 22, 23 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 20.0 ]
+}
 
 [sub_resource type="Animation" id=4]
 length = 0.001
@@ -185,6 +213,34 @@ tracks/1/keys = {
 "values": [ 8.0 ]
 }
 
+[sub_resource type="Animation" id=11]
+resource_name = "wind"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.8, 1.6, 2.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 15, 16, 17, 18 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 20.0 ]
+}
+
 [node name="Player" type="KinematicBody2D"]
 position = Vector2( 53.9726, 60.9437 )
 collision_layer = 4
@@ -207,11 +263,11 @@ shape = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="Pivot"]
 material = SubResource( 3 )
-position = Vector2( 0, -10 )
+position = Vector2( 8.82338, -10.2363 )
 texture = ExtResource( 1 )
-vframes = 2
+vframes = 3
 hframes = 8
-frame = 12
+frame = 23
 
 [node name="Camera2D" type="Camera2D" parent="Pivot"]
 position = Vector2( 20, 0 )
@@ -226,16 +282,17 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_speed = 8.0
+anims/attack = SubResource( 10 )
 anims/duck = SubResource( 4 )
 anims/fall = SubResource( 7 )
 anims/idle = SubResource( 5 )
 anims/jump = SubResource( 8 )
 anims/land = SubResource( 9 )
 anims/walk = SubResource( 6 )
+anims/wind = SubResource( 11 )
 
 [node name="TimeEffect" parent="." instance=ExtResource( 3 )]
 
 [node name="GemWheel" parent="." instance=ExtResource( 4 )]
 pause_mode = 2
-position = Vector2( 0.062645, 0 )
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
