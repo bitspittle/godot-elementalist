@@ -10,10 +10,6 @@ var POISON = Spell.new()
 var STONE = Spell.new()
 var WATER = Spell.new()
 
-# Order chosen clockwise, from 12. Also, oppositing types are
-# on opposite sides and defensive spells are on the left side
-var LIST = [WATER, LIGHTNING, AIR, STONE, FIRE, POISON, NATURE, LIFE]
-
 func _ready():
 	AIR.name = "Air"
 	AIR.color = Color(0x61d3e3ff)

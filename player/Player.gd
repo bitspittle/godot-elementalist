@@ -27,15 +27,18 @@ var _state = State.IDLE
 var _next_state = State.IDLE
 
 onready var _pivot = $Pivot
+onready var _player_sprite = $Pivot/PlayerSprite
 onready var _platform_detector: Area2D = $PlatformDetector
 onready var _jump_timer: Timer = $JumpTimer
 onready var _anim: AnimationPlayer = $AnimationPlayer
 onready var _time = $TimeEffect
 onready var _gem_wheel = $GemWheel
 
+var _selected_spell: Spell
 var _tmp_start_pos: Vector2
 
 func _ready():
+	_set_spell(Spells.NONE)
 	_anim.play("idle")
 	_tmp_start_pos = position
 
@@ -130,3 +133,10 @@ func _physics_process(delta):
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "land" or anim_name == "attack":
 		_next_state = State.IDLE
+
+
+func _on_GemWheel_spell_selected(spell):
+	_set_spell(spell)
+
+func _set_spell(spell: Spell):
+	_player_sprite.get_material().set_shader_param("color_modulate", spell.color)
