@@ -18,10 +18,16 @@ _global_script_classes=[ {
 "class": "PercentBar",
 "language": "GDScript",
 "path": "res://ui/PercentBar.gd"
+}, {
+"base": "Reference",
+"class": "Spell",
+"language": "GDScript",
+"path": "res://mana/spells/Spell.gd"
 } ]
 _global_script_class_icons={
 "GemWheel": "",
-"PercentBar": ""
+"PercentBar": "",
+"Spell": ""
 }
 
 [application]
@@ -32,7 +38,7 @@ run/main_scene="res://world/World.tscn"
 [autoload]
 
 Layers="*res://engine/Layers.gd"
-GameColors="*res://common/GameColors.gd"
+Spells="*res://mana/spells/Spells.gd"
 
 [display]
 

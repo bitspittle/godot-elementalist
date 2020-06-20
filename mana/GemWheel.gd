@@ -26,14 +26,14 @@ onready var _cursor = $Cursor
 
 func _ready():
 	_anim.play("hide")
-	_gemN.color = GameColors.WATER
-	_gemNE.color = GameColors.LIGHTNING
-	_gemE.color = GameColors.AIR
-	_gemSE.color = GameColors.STONE
-	_gemS.color = GameColors.FIRE
-	_gemSW.color = GameColors.POISON
-	_gemW.color = GameColors.NATURE
-	_gemNW.color = GameColors.LIFE
+	_gemN.color = Spells.LIST[0].color
+	_gemNE.color = Spells.LIST[1].color
+	_gemE.color = Spells.LIST[2].color
+	_gemSE.color = Spells.LIST[3].color
+	_gemS.color = Spells.LIST[4].color
+	_gemSW.color = Spells.LIST[5].color
+	_gemW.color = Spells.LIST[6].color
+	_gemNW.color = Spells.LIST[7].color
 
 func _process(_delta):
 	if _state == State.HIDDEN && Input.is_action_just_pressed("show_gem_wheel"):
