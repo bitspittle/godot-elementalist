@@ -16,7 +16,7 @@ enum State {
 	JUMPING,
 	FALLING,
 	LANDING,
-	WINDING,
+	WINDING_UP,
 	ATTACKING,
 }
 
@@ -50,7 +50,11 @@ func _process(_delta):
 
 	if _state != _next_state:
 		if _next_state == State.IDLE:
-			_anim.play("idle")
+			if _state == State.DUCKING:
+				_anim.play_backwards("duck")
+				_anim.queue("idle")
+			else:
+				_anim.play("idle")
 		elif _next_state == State.WALKING:
 			_anim.play("walk")
 		elif _next_state == State.DUCKING:
@@ -61,8 +65,8 @@ func _process(_delta):
 			_anim.play("fall")
 		elif _next_state == State.LANDING:
 			_anim.play("land")
-		elif _next_state == State.WINDING:
-			_anim.play("wind")
+		elif _next_state == State.WINDING_UP:
+			_anim.play("windup")
 		elif _next_state == State.ATTACKING:
 			_anim.play("attack")
 
@@ -118,9 +122,9 @@ func _physics_process(delta):
 		_next_state = State.LANDING
 
 	elif (_state == State.IDLE || _state == State.WALKING || _state == State.ATTACKING || _state == State.LANDING) && Input.is_action_just_pressed("player_attack"):
-		_next_state = State.WINDING
+		_next_state = State.WINDING_UP
 
-	elif _state == State.WINDING && Input.is_action_just_released("player_attack"):
+	elif _state == State.WINDING_UP && Input.is_action_just_released("player_attack"):
 		_next_state = State.ATTACKING
 
 	if (!_jump_timer.is_stopped()):
