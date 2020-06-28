@@ -18,6 +18,8 @@ enum State {
 	LANDING,
 	WINDING_UP,
 	ATTACKING,
+	CASTING,
+	CLIMBING,
 }
 
 var _vel = Vector2.ZERO
@@ -69,6 +71,10 @@ func _process(_delta):
 			_anim.play("windup")
 		elif _next_state == State.ATTACKING:
 			_anim.play("attack")
+		elif _next_state == State.CASTING:
+			_anim.play("cast")
+		elif _next_state == State.CLIMBING:
+			_anim.play("climb")
 
 		_state = _next_state
 
@@ -127,6 +133,12 @@ func _physics_process(delta):
 	elif _state == State.WINDING_UP && Input.is_action_just_released("player_attack"):
 		_next_state = State.ATTACKING
 
+	elif Input.is_action_just_pressed("player_cast") && _selected_spell != Spells.NONE && is_on_floor():
+		_next_state = State.CASTING
+
+	elif _state == State.CASTING && Input.is_action_just_released("player_cast"):
+		_next_state = State.IDLE
+
 	if (!_jump_timer.is_stopped()):
 		if Input.is_action_pressed("player_jump"):
 			_vel.y = -JUMP_FORCE
@@ -139,8 +151,15 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 		_next_state = State.IDLE
 
 
+func _on_GemWheel_opening():
+	if _state == State.CASTING:
+		_next_state = State.IDLE
+
 func _on_GemWheel_spell_selected(spell):
 	_set_spell(spell)
 
 func _set_spell(spell: Spell):
+	_selected_spell = spell
 	_player_sprite.get_material().set_shader_param("color_modulate", spell.color)
+
+

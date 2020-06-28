@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/images/player.png" type="Texture" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
@@ -31,7 +31,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.5, 0.9, 1.4, 4.6 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 35, 36, 37, 38, 39 ]
+"values": [ 42, 43, 44, 45, 46 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -46,6 +46,64 @@ tracks/1/keys = {
 "values": [ 20.0 ]
 }
 
+[sub_resource type="Animation" id=12]
+resource_name = "cast"
+length = 6.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3, 4, 5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 48, 49, 50, 51, 52, 53 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 15.0 ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "climb"
+length = 4.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 55, 54, 55, 56 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 8.0 ]
+}
+
 [sub_resource type="Animation" id=5]
 length = 0.5
 tracks/0/type = "value"
@@ -58,7 +116,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ 10, 11 ]
+"values": [ 12, 13 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -86,7 +144,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.8 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ 20, 21 ]
+"values": [ 24, 25 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -142,7 +200,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.3, 0.9, 1.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 15, 16, 17, 18 ]
+"values": [ 18, 19, 20, 21 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -170,7 +228,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 1.6 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
-"values": [ 25, 26, 2 ]
+"values": [ 30, 31, 2 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -198,7 +256,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1, 2, 3 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 5, 6, 5, 7 ]
+"values": [ 6, 7, 6, 8 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -226,7 +284,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.8, 1.6, 2.4 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 30, 31, 32, 33 ]
+"values": [ 36, 37, 38, 39 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -265,9 +323,9 @@ shape = SubResource( 2 )
 material = SubResource( 3 )
 position = Vector2( 8.82338, -10.2363 )
 texture = ExtResource( 1 )
-vframes = 8
-hframes = 5
-frame = 33
+vframes = 10
+hframes = 6
+frame = 48
 
 [node name="Camera2D" type="Camera2D" parent="Pivot"]
 position = Vector2( 20, 0 )
@@ -281,8 +339,10 @@ wait_time = 0.35
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 20.0
+playback_speed = 10.0
 anims/attack = SubResource( 4 )
+anims/cast = SubResource( 12 )
+anims/climb = SubResource( 13 )
 anims/duck = SubResource( 5 )
 anims/fall = SubResource( 6 )
 anims/idle = SubResource( 7 )
@@ -296,4 +356,5 @@ anims/windup = SubResource( 11 )
 [node name="GemWheel" parent="." instance=ExtResource( 4 )]
 pause_mode = 2
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="opening" from="GemWheel" to="." method="_on_GemWheel_opening"]
 [connection signal="spell_selected" from="GemWheel" to="." method="_on_GemWheel_spell_selected"]

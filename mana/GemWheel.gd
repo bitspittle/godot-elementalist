@@ -2,6 +2,7 @@ extends Node2D
 
 class_name GemWheel
 
+signal opening()
 signal spell_selected(spell)
 
 onready var _anim = $AnimationPlayer
@@ -34,6 +35,7 @@ func _process(_delta):
 		_cursor_pos = Vector2.ZERO
 		_state = State.ANIMATING_IN
 		_anim.play("in")
+		emit_signal("opening")
 
 	elif _state == State.SHOWN && not Input.is_action_pressed("show_gem_wheel"):
 		_state = State.ANIMATING_OUT
