@@ -1,10 +1,12 @@
 extends KinematicBody2D
 
-const ACCELERATION = 512
-const MAX_SPEED = 100
+const WALKING_ACCELERATION = 512
+const MAX_WALKING_SPEED = 100
 const FRICTION = .25
 const GRAVITY = 1000
 const JUMP_FORCE = 150
+
+const MAX_CLIMBING_SPEED = 80
 
 var SLOPE_THRESHOLD = deg2rad(46)
 var DEFAULT_SNAP_VECTOR = Vector2.DOWN * 40.0 # Make sure we snip hard if walking down sleep slopes
@@ -49,6 +51,7 @@ func _process(_delta):
 		_vel = Vector2.ZERO
 		position = _tmp_start_pos
 		set_collision_mask_bit(Layers.PLATFORMS, true)
+		_next_state = State.IDLE
 
 	if _state != _next_state:
 		if _next_state == State.IDLE:
@@ -78,7 +81,19 @@ func _process(_delta):
 
 		_state = _next_state
 
+	if _state == State.CLIMBING:
+		if _anim.is_playing() && _vel == Vector2.ZERO:
+			_anim.stop(false)
+		elif !_anim.is_playing() && _vel != Vector2.ZERO:
+			_anim.play()
+
 func _physics_process(delta):
+	if _state != State.CLIMBING:
+		_physics_process_walking(delta)
+	else:
+		_physics_process_climbing(delta)
+
+func _physics_process_walking(delta):
 	if _state != State.DUCKING:
 		var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
 		if x_input != 0:
@@ -89,8 +104,8 @@ func _physics_process(delta):
 				_vel.x = 0 # quick turnaround
 				_pivot.scale.x = sign(x_input)
 
-			_vel.x += x_input * ACCELERATION * delta
-			_vel.x = clamp(_vel.x, -MAX_SPEED, MAX_SPEED)
+			_vel.x += x_input * WALKING_ACCELERATION * delta
+			_vel.x = clamp(_vel.x, -MAX_WALKING_SPEED, MAX_WALKING_SPEED)
 
 		else:
 			if _state == State.WALKING:
@@ -144,6 +159,17 @@ func _physics_process(delta):
 			_vel.y = -JUMP_FORCE
 		else:
 			_jump_timer.stop()
+
+func _physics_process_climbing(delta):
+	var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
+	var y_input = Input.get_action_strength("player_down") - Input.get_action_strength("player_up")
+
+	var input = Vector2(x_input, y_input)
+	if input != Vector2.ZERO:
+		_vel = input.normalized() * MAX_CLIMBING_SPEED * delta
+		position += _vel
+	else:
+		_vel = Vector2.ZERO
 
 
 func _on_AnimationPlayer_animation_finished(anim_name):

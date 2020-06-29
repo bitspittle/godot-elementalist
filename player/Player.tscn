@@ -325,7 +325,7 @@ position = Vector2( 8.82338, -10.2363 )
 texture = ExtResource( 1 )
 vframes = 10
 hframes = 6
-frame = 48
+frame = 55
 
 [node name="Camera2D" type="Camera2D" parent="Pivot"]
 position = Vector2( 20, 0 )
@@ -339,7 +339,7 @@ wait_time = 0.35
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 10.0
+playback_speed = 8.0
 anims/attack = SubResource( 4 )
 anims/cast = SubResource( 12 )
 anims/climb = SubResource( 13 )
