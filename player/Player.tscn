@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://assets/images/player.png" type="Texture" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
@@ -105,7 +105,7 @@ tracks/1/keys = {
 }
 
 [sub_resource type="Animation" id=5]
-length = 0.5
+length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Pivot/PlayerSprite:frame")
 tracks/0/interp = 1
@@ -113,10 +113,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ 12, 13 ]
+"values": [ 13 ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("AnimationPlayer:playback_speed")
@@ -129,6 +129,34 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ 10.0 ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "duck attack"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 0.9, 3, 3.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 60, 61, 62, 63, 64 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 20.0 ]
 }
 
 [sub_resource type="Animation" id=6]
@@ -243,6 +271,34 @@ tracks/1/keys = {
 "values": [ 8.0 ]
 }
 
+[sub_resource type="Animation" id=15]
+resource_name = "squat"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Pivot/PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 12 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationPlayer:playback_speed")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 20.0 ]
+}
+
 [sub_resource type="Animation" id=10]
 length = 4.0
 loop = true
@@ -323,9 +379,9 @@ shape = SubResource( 2 )
 material = SubResource( 3 )
 position = Vector2( 8.82338, -10.2363 )
 texture = ExtResource( 1 )
-vframes = 10
+vframes = 11
 hframes = 6
-frame = 55
+frame = 60
 
 [node name="Camera2D" type="Camera2D" parent="Pivot"]
 position = Vector2( 20, 0 )
@@ -339,15 +395,16 @@ wait_time = 0.35
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-playback_speed = 8.0
 anims/attack = SubResource( 4 )
 anims/cast = SubResource( 12 )
 anims/climb = SubResource( 13 )
 anims/duck = SubResource( 5 )
+"anims/duck attack" = SubResource( 14 )
 anims/fall = SubResource( 6 )
 anims/idle = SubResource( 7 )
 anims/jump = SubResource( 8 )
 anims/land = SubResource( 9 )
+anims/squat = SubResource( 15 )
 anims/walk = SubResource( 10 )
 anims/windup = SubResource( 11 )
 

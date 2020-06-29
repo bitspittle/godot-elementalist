@@ -28,6 +28,7 @@ var _vel = Vector2.ZERO
 var _snap_vector = DEFAULT_SNAP_VECTOR
 
 var _state = State.IDLE
+var _prev_state = State.IDLE
 var _next_state = State.IDLE
 
 onready var _pivot = $Pivot
@@ -63,7 +64,11 @@ func _process(_delta):
 		elif _next_state == State.WALKING:
 			_anim.play("walk")
 		elif _next_state == State.DUCKING:
-			_anim.play("duck")
+			if _prev_state != State.ATTACKING:
+				_anim.play("squat")
+				_anim.queue("duck")
+			else:
+				_anim.play("duck")
 		elif _next_state == State.JUMPING:
 			_anim.play("jump")
 		elif _next_state == State.FALLING:
@@ -73,12 +78,17 @@ func _process(_delta):
 		elif _next_state == State.WINDING_UP:
 			_anim.play("windup")
 		elif _next_state == State.ATTACKING:
-			_anim.play("attack")
+			if _state == State.DUCKING:
+				_anim.play("duck attack")
+			else:
+				_anim.play("attack")
 		elif _next_state == State.CASTING:
 			_anim.play("cast")
 		elif _next_state == State.CLIMBING:
 			_anim.play("climb")
 
+		print(_state, " -> ", _next_state)
+		_prev_state = _state
 		_state = _next_state
 
 	if _state == State.CLIMBING:
@@ -131,7 +141,7 @@ func _physics_process_walking(delta):
 				_next_state = State.JUMPING
 			set_collision_mask_bit(Layers.PLATFORMS, false)
 
-	elif _state != State.DUCKING && Input.is_action_pressed("player_down"):
+	elif _state != State.DUCKING && _state != State.ATTACKING && Input.is_action_pressed("player_down"):
 		if is_on_floor():
 			_next_state = State.DUCKING
 			_vel.x = 0
@@ -145,7 +155,7 @@ func _physics_process_walking(delta):
 	elif (_state == State.IDLE || _state == State.WALKING || _state == State.ATTACKING || _state == State.LANDING) && Input.is_action_just_pressed("player_attack"):
 		_next_state = State.WINDING_UP
 
-	elif _state == State.WINDING_UP && Input.is_action_just_released("player_attack"):
+	elif (_state == State.WINDING_UP || _state == State.DUCKING) && Input.is_action_just_released("player_attack"):
 		_next_state = State.ATTACKING
 
 	elif Input.is_action_just_pressed("player_cast") && _selected_spell != Spells.NONE && is_on_floor():
@@ -173,9 +183,10 @@ func _physics_process_climbing(delta):
 
 
 func _on_AnimationPlayer_animation_finished(anim_name):
-	if anim_name == "land" or anim_name == "attack":
+	if anim_name == "land" || anim_name == "attack":
 		_next_state = State.IDLE
-
+	elif anim_name == "duck attack":
+		_next_state = State.DUCKING
 
 func _on_GemWheel_opening():
 	if _state == State.CASTING:
@@ -187,5 +198,3 @@ func _on_GemWheel_spell_selected(spell):
 func _set_spell(spell: Spell):
 	_selected_spell = spell
 	_player_sprite.get_material().set_shader_param("color_modulate", spell.color)
-
-
