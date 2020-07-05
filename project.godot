@@ -63,10 +63,11 @@ _global_script_class_icons={
 [application]
 
 config/name="Elementalist"
-run/main_scene="res://world/World.tscn"
+run/main_scene="res://EntryPoint.tscn"
 
 [autoload]
 
+NetworkGlobals="*res://network/NetworkGlobals.gd"
 Layers="*res://engine/Layers.gd"
 Spells="*res://mana/spells/Spells.gd"
 

@@ -1,0 +1,87 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/fonts/font_square_medium.tres" type="DynamicFont" id=1]
+[ext_resource path="res://network/client/MainMenu.gd" type="Script" id=2]
+[ext_resource path="res://assets/fonts/font_square_large.tres" type="DynamicFont" id=3]
+[ext_resource path="res://network/client/Client.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Theme" id=1]
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BackgroundColor" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.31, 0.31, 0.31, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LocalButton" type="Button" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -219.368
+margin_right = -20.0
+margin_bottom = -179.368
+rect_pivot_offset = Vector2( 5.81336, -102.834 )
+custom_fonts/font = ExtResource( 3 )
+text = "Solo Play"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NameLabel" type="Label" parent="."]
+anchor_right = 1.0
+margin_left = 20.0
+margin_top = 119.305
+margin_right = -20.0
+margin_bottom = 143.305
+custom_fonts/font = ExtResource( 3 )
+text = "NAME:"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NameEdit" type="LineEdit" parent="."]
+anchor_right = 1.0
+margin_left = 20.0
+margin_top = 148.0
+margin_right = -20.0
+margin_bottom = 182.0
+theme = SubResource( 1 )
+custom_fonts/font = ExtResource( 1 )
+custom_constants/minimum_spaces = 0
+text = "012345678901234"
+max_length = 15
+expand_to_text_length = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RemoteButton" type="Button" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -51.0
+margin_right = -20.0
+margin_bottom = -11.0
+rect_pivot_offset = Vector2( 5.81336, -102.834 )
+custom_fonts/font = ExtResource( 3 )
+text = "Join Server"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Client" parent="." instance=ExtResource( 4 )]
+[connection signal="pressed" from="LocalButton" to="." method="_on_SinglePlayerButton_pressed"]
+[connection signal="text_changed" from="NameEdit" to="." method="_on_NameEdit_text_changed"]
+[connection signal="pressed" from="RemoteButton" to="." method="_on_MultiplayerButton_pressed"]

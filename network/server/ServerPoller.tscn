@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+class_name ServerPoller
+
+var server: WebSocketServer
+
+func _process(delta):
+	if server.is_listening():
+		server.poll()
+"
+
+[node name="ServerPoller" type="Node"]
+script = SubResource( 1 )
