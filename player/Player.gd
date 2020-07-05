@@ -52,11 +52,8 @@ func _process(_delta):
 		elif next_state == State.WALKING:
 			_anim.play("walk")
 		elif next_state == State.DUCKING:
-			if _prev_state != State.ATTACKING:
-				_anim.play("squat")
-				_anim.queue("duck")
-			else:
-				_anim.play("duck")
+			_anim.play("squat")
+			_anim.queue("duck")
 		elif next_state == State.JUMPING:
 			_anim.play("jump")
 			set_collision_mask_bit(Layers.PLATFORMS, false)
@@ -70,15 +67,13 @@ func _process(_delta):
 		elif next_state == State.WINDING_UP:
 			_anim.play("windup")
 		elif next_state == State.ATTACKING:
-			if state == State.DUCKING:
-				_anim.play("duck attack")
-			else:
-				_anim.play("attack")
+			_anim.play("attack")
 		elif next_state == State.CASTING:
 			_anim.play("cast")
 		elif next_state == State.CLIMBING:
 			_anim.play("climb")
 
+		# print("Changing: ", State.keys()[state], " -> ", State.keys()[next_state])
 		_prev_state = state
 		state = next_state
 		next_state = state
@@ -103,8 +98,6 @@ func _physics_process(delta):
 func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "land" || anim_name == "attack":
 		next_state = State.IDLE
-	elif anim_name == "duck attack":
-		next_state = State.DUCKING
 
 func _on_GemWheel_opening():
 	# Turn off casting when inside the gem wheel, because

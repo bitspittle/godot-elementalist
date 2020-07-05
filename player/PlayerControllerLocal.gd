@@ -72,6 +72,7 @@ func _physics_process_walking(delta):
 				player.next_state = Player.State.JUMPING_DOWN
 
 	elif player.state != Player.State.DUCKING \
+	&& player.state != Player.State.WINDING_UP \
 	&& player.state != Player.State.ATTACKING \
 	&& Input.is_action_pressed("player_down"):
 		if player.is_on_floor():
@@ -90,8 +91,12 @@ func _physics_process_walking(delta):
 	&& Input.is_action_just_pressed("player_attack"):
 		player.next_state = Player.State.WINDING_UP
 
-	elif (player.state == Player.State.WINDING_UP || player.state == Player.State.DUCKING) \
+	elif (player.state == Player.State.WINDING_UP) \
 	&& Input.is_action_just_released("player_attack"):
+		player.next_state = Player.State.ATTACKING
+
+	elif (player.state == Player.State.DUCKING) \
+	&& Input.is_action_just_pressed("player_attack"):
 		player.next_state = Player.State.ATTACKING
 
 	elif Input.is_action_just_pressed("player_cast") \
