@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Reference",
+"class": "CmdLineArgs",
+"language": "GDScript",
+"path": "res://common/CmdLineArgs.gd"
+}, {
 "base": "Node2D",
 "class": "GemWheel",
 "language": "GDScript",
@@ -45,6 +50,7 @@ _global_script_classes=[ {
 "path": "res://mana/spells/Spell.gd"
 } ]
 _global_script_class_icons={
+"CmdLineArgs": "",
 "GemWheel": "",
 "PercentBar": "",
 "Player": "",
