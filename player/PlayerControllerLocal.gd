@@ -24,6 +24,7 @@ func set_player(value: Player):
 	_tmp_start_pos = player.position
 
 func _process(delta):
+	# TODO: Delete this, it's debug code only
 	if Input.is_action_pressed("ui_cancel") or player.position.y > 500:
 		player.vel = Vector2.ZERO
 		player.position = _tmp_start_pos
