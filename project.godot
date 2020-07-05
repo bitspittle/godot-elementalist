@@ -19,6 +19,26 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://ui/PercentBar.gd"
 }, {
+"base": "KinematicBody2D",
+"class": "Player",
+"language": "GDScript",
+"path": "res://player/Player.gd"
+}, {
+"base": "Node",
+"class": "PlayerController",
+"language": "GDScript",
+"path": "res://player/PlayerController.gd"
+}, {
+"base": "PlayerController",
+"class": "PlayerControllerLocal",
+"language": "GDScript",
+"path": "res://player/PlayerControllerLocal.gd"
+}, {
+"base": "PlayerController",
+"class": "PlayerControllerRemote",
+"language": "GDScript",
+"path": "res://player/PlayerControllerRemote.gd"
+}, {
 "base": "Reference",
 "class": "Spell",
 "language": "GDScript",
@@ -27,6 +47,10 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "GemWheel": "",
 "PercentBar": "",
+"Player": "",
+"PlayerController": "",
+"PlayerControllerLocal": "",
+"PlayerControllerRemote": "",
 "Spell": ""
 }
 
