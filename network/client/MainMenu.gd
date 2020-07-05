@@ -13,6 +13,8 @@ func _ready():
 	_name_edit.text = ""
 	_update_connect_enabled()
 	_local_button.grab_focus()
+	get_tree().connect("connected_to_server", self, "_connected_success")
+
 
 func _on_NameEdit_text_changed(new_text):
 	_update_connect_enabled()
@@ -30,18 +32,26 @@ func _on_SinglePlayerButton_pressed():
 func _on_Stage_ready(stage):
 	var player = PlayerFactory.new_player()
 	stage.players.add_child(player)
-
 	self.queue_free()
+
+
 
 func _on_MultiplayerButton_pressed():
 	var ip = CmdLineArgs.get_str_value("--ip")
 	var port = CmdLineArgs.get_int_value("--port")
 
 	if ip == "":
-		ip = NetworkGlobals.IPV4
+		if OS.is_debug_build():
+			ip = NetworkGlobals.LOCALHOST
+		else:
+			ip = NetworkGlobals.SERVER_IP
 	if port == 0:
 		port = NetworkGlobals.PORT
 
 	var client = _client_scene.instance()
 	get_tree().get_root().add_child(client)
 	client.connect_to_server(ip, port)
+
+func _connected_success():
+	self.queue_free()
+

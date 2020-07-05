@@ -17,10 +17,23 @@ var _snap_vector = DEFAULT_SNAP_VECTOR
 
 onready var _jump_timer = $JumpTimer
 
+# Used for updating network state
+var _last_state = Player.State.IDLE
+var _last_spell = Spells.NONE
+
 func _process(delta):
 	# TODO: Delete this, it's debug code only
 	if Input.is_action_pressed("ui_cancel"):
 		player.reset()
+
+	if get_tree().network_peer != null:
+		if _last_state != player.state:
+			rpc("set_next_state", player.state)
+			_last_state = player.state
+		if _last_spell != player.selected_spell:
+			rpc("set_spell_index", player.gem_wheel.spells.find(player.selected_spell))
+			_last_spell = player.selected_spell
+
 
 func _physics_process(delta):
 	if player.state != Player.State.CLIMBING:
@@ -28,8 +41,19 @@ func _physics_process(delta):
 	else:
 		_physics_process_climbing(delta)
 
+	rpc_unreliable("set_physics", player.position, player.vel)
+
 func _physics_process_walking(delta):
 	var x_input = 0
+
+	if player.state == Player.State.IDLE:
+		if Input.is_action_just_pressed("show_gem_wheel"):
+			player.gem_wheel.open()
+		elif Input.is_action_just_released("show_gem_wheel"):
+			player.gem_wheel.close()
+
+	if player.gem_wheel.is_active():
+		return
 
 	if player.state == Player.State.IDLE \
 	|| player.state == Player.State.WALKING \

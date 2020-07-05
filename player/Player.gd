@@ -21,6 +21,7 @@ var vel = Vector2.ZERO
 var state = State.IDLE
 var next_state = State.IDLE
 var selected_spell: Spell
+onready var gem_wheel: GemWheel = $GemWheel
 # End controller
 
 var _prev_state = State.IDLE
@@ -30,12 +31,11 @@ onready var _player_sprite = $Pivot/PlayerSprite
 onready var _platform_detector: Area2D = $PlatformDetector
 onready var _anim: AnimationPlayer = $AnimationPlayer
 onready var _time = $TimeEffect
-onready var _gem_wheel = $GemWheel
 
 var _tmp_start_pos = Vector2.ZERO
 
 func _ready():
-	_set_spell(Spells.NONE)
+	set_spell(Spells.NONE)
 	_anim.play("idle")
 	_tmp_start_pos = position
 
@@ -105,12 +105,11 @@ func _on_GemWheel_opening():
 		next_state = State.IDLE
 
 func _on_GemWheel_spell_selected(spell):
-	_set_spell(spell)
+	set_spell(spell)
 
-func _set_spell(spell: Spell):
+func set_spell(spell: Spell):
 	selected_spell = spell
 	_player_sprite.get_material().set_shader_param("color_modulate", spell.color)
-
 
 func reset():
 	vel = Vector2.ZERO

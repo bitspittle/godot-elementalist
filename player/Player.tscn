@@ -380,6 +380,5 @@ pause_mode = 2
 
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
-[connection signal="opening" from="GemWheel" to="." method="_on_GemWheel_opening"]
 [connection signal="spell_selected" from="GemWheel" to="." method="_on_GemWheel_spell_selected"]
 [connection signal="viewport_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_viewport_exited"]

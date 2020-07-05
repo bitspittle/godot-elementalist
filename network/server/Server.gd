@@ -6,7 +6,7 @@ var _stage: Stage = null
 
 var _stage_scene = preload("res://stages/Stage.tscn")
 
-func start():
+func _ready():
 	var port = CmdLineArgs.get_int_value("--port")
 	if port == 0:
 		port = NetworkGlobals.PORT
@@ -30,7 +30,7 @@ func _peer_connected(id):
 
 	if _clients.size() == 0:
 		_stage = _stage_scene.instance()
-		get_parent().add_child(_stage)
+		get_tree().get_root().add_child(_stage)
 	_clients[id] = null
 
 	var player = PlayerFactory.new_player(id, false)
@@ -43,11 +43,13 @@ func _add_player_to_stage(stage, player):
 	var players = _stage.players
 	players.add_child(player)
 
+	print("Added player: ", player.get_path())
+
 func _peer_disconnected(id):
 	print("Disconnected: ", id)
 	_clients.erase(id)
 
-	for player in _stage.players:
+	for player in _stage.players.get_children():
 		if player.name.ends_with(id):
 			player.queue_free()
 

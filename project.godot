@@ -70,6 +70,7 @@ _global_script_class_icons={
 
 config/name="Elementalist"
 run/main_scene="res://EntryPoint.tscn"
+config/icon="res://assets/images/icon.png"
 
 [autoload]
 

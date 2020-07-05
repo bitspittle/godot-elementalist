@@ -9,8 +9,8 @@ func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_success")
 	get_tree().connect("connection_failed", self, "_connected_failure")
 	get_tree().connect("server_disconnected", self, "_server_disconnected")
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	get_tree().connect("network_peer_connected", self, "_peer_connected")
+	get_tree().connect("network_peer_disconnected", self, "_peer_disconnected")
 
 func connect_to_server(ip: String, port: int) -> void:
 	_client = WebSocketClient.new()
@@ -35,14 +35,19 @@ func _connected_success():
 	print("Connection successful")
 	_stage = _stage_scene.instance()
 	var id = get_tree().get_network_unique_id()
-	_stage.connect("ready", self, "_on_Stage_connected", [_stage, PlayerFactory.new_player(id, true)])
-	get_parent().add_child(_stage)
+	_stage.connect("ready", self, "_add_player_to_stage", [_stage, PlayerFactory.new_player(id, true)])
+	get_tree().get_root().add_child(_stage)
 
-func _on_Stage_connected(stage, player):
-	stage.add_child(player)
+func _add_player_to_stage(stage, player):
+	stage.players.add_child(player)
+	print("Added player: ", player.get_path())
+
 
 func _connected_failure():
 	print("Connection rejected")
+	if _stage != null:
+		# TODO: Graceful network recovery, back to main menu?
+		get_tree().quit()
 
 func _server_disconnected():
 	print("Server disconnected")
@@ -52,14 +57,16 @@ func _server_disconnected():
 func _peer_connected(id):
 	print("Connected: ", id)
 
-	var player = PlayerFactory.new_player(id, false)
-	var players = _stage.players
-	_stage.add_child(player)
+	if id > 1:
+		var player = PlayerFactory.new_player(id, false)
+		var players = _stage.players
+		_stage.add_child(player)
 
 func _peer_disconnected(id):
 	print("Disconnected: ", id)
 
-	for player in _stage.players:
-		if player.name.ends_with(id):
-			player.queue_free()
-			return
+	if id > 1:
+		for player in _stage.players:
+			if player.name.ends_with(id):
+				player.queue_free()
+				return
