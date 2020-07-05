@@ -5,7 +5,6 @@ var _clients = {}
 var _stage: Stage = null
 
 var _stage_scene = preload("res://stages/Stage.tscn")
-var _player_scene = preload("res://player/Player.tscn")
 
 func start():
 	var port = CmdLineArgs.get_int_value("--port")
@@ -28,14 +27,20 @@ func _process(delta):
 
 func _peer_connected(id):
 	print("Connected: ", id)
-	_clients[id] = null
-	if _clients.size() == 1:
+
+	if _clients.size() == 0:
 		_stage = _stage_scene.instance()
 		get_parent().add_child(_stage)
+	_clients[id] = null
 
+	var player = PlayerFactory.new_player(id, false)
+	if _stage.is_inside_tree():
+		_add_player_to_stage(_stage, player)
+	else:
+		_stage.connect("ready", self, "_add_player_to_stage", [_stage, player])
+
+func _add_player_to_stage(stage, player):
 	var players = _stage.players
-	var player = _player_scene.instance()
-	player.name += id
 	players.add_child(player)
 
 func _peer_disconnected(id):

@@ -28,10 +28,7 @@ func _on_SinglePlayerButton_pressed():
 	get_tree().get_root().add_child(stage)
 
 func _on_Stage_ready(stage):
-	var player: Player = _player_scene.instance()
-	var controller: PlayerController = _local_controller_scene.instance()
-	controller.player = player
-	player.add_child(controller)
+	var player = PlayerFactory.new_player()
 	stage.players.add_child(player)
 
 	self.queue_free()

@@ -3,9 +3,6 @@ extends Node
 var _client: WebSocketClient = null
 
 var _stage_scene = preload("res://stages/Stage.tscn")
-var _player_scene = preload("res://player/Player.tscn")
-var _player_controller_local = preload("res://player/PlayerControllerLocal.tscn")
-
 var _stage: Stage = null
 
 func _ready():
@@ -37,14 +34,12 @@ func _process(delta):
 func _connected_success():
 	print("Connection successful")
 	_stage = _stage_scene.instance()
-
-	var player: Player = _player_scene.instance()
 	var id = get_tree().get_network_unique_id()
-	player.name += id
-	player.set_network_master(id)
-	player.controller
-	_stage.add_child(player)
+	_stage.connect("ready", self, "_on_Stage_connected", [_stage, PlayerFactory.new_player(id, true)])
 	get_parent().add_child(_stage)
+
+func _on_Stage_connected(stage, player):
+	stage.add_child(player)
 
 func _connected_failure():
 	print("Connection rejected")
@@ -57,10 +52,14 @@ func _server_disconnected():
 func _peer_connected(id):
 	print("Connected: ", id)
 
+	var player = PlayerFactory.new_player(id, false)
 	var players = _stage.players
-	var player: Player = _player_scene.instance()
-	player.name += id
-	players.add_child(player)
+	_stage.add_child(player)
 
 func _peer_disconnected(id):
 	print("Disconnected: ", id)
+
+	for player in _stage.players:
+		if player.name.ends_with(id):
+			player.queue_free()
+			return

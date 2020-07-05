@@ -76,6 +76,7 @@ run/main_scene="res://EntryPoint.tscn"
 NetworkGlobals="*res://network/NetworkGlobals.gd"
 Layers="*res://engine/Layers.gd"
 Spells="*res://mana/spells/Spells.gd"
+PlayerFactory="*res://player/PlayerFactory.gd"
 
 [display]
 
