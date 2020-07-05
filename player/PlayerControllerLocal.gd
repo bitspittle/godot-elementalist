@@ -38,22 +38,29 @@ func _physics_process(delta):
 		_physics_process_climbing(delta)
 
 func _physics_process_walking(delta):
-	if player.state != Player.State.DUCKING:
-		var x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
-		if x_input != 0:
-			if player.state == Player.State.IDLE:
-				player.next_state = Player.State.WALKING
+	var x_input = 0
 
-			if sign(x_input) != sign(player.vel.x):
-				player.vel.x = 0 # quick turnaround
+	if player.state == Player.State.IDLE \
+	|| player.state == Player.State.WALKING \
+	|| player.state == Player.State.JUMPING \
+	|| player.state == Player.State.FALLING \
+	|| player.state == Player.State.LANDING:
+		x_input = Input.get_action_strength("player_right") - Input.get_action_strength("player_left")
 
-			player.vel.x += x_input * WALKING_ACCELERATION * delta
-			player.vel.x = clamp(player.vel.x, -MAX_WALKING_SPEED, MAX_WALKING_SPEED)
+	if x_input != 0:
+		if player.state == Player.State.IDLE:
+			player.next_state = Player.State.WALKING
 
-		else:
-			if player.state == Player.State.WALKING:
-				player.next_state = Player.State.IDLE
-			player.vel.x = 0
+		if sign(x_input) != sign(player.vel.x):
+			player.vel.x = 0 # quick turnaround
+
+		player.vel.x += x_input * WALKING_ACCELERATION * delta
+		player.vel.x = clamp(player.vel.x, -MAX_WALKING_SPEED, MAX_WALKING_SPEED)
+
+	else:
+		if player.state == Player.State.WALKING:
+			player.next_state = Player.State.IDLE
+		player.vel.x = 0
 
 	player.vel.y += GRAVITY * delta
 	player.vel.y = player.move_and_slide_with_snap(player.vel, _snap_vector, Vector2.UP, true, 4, SLOPE_THRESHOLD).y
