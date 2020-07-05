@@ -32,11 +32,12 @@ onready var _anim: AnimationPlayer = $AnimationPlayer
 onready var _time = $TimeEffect
 onready var _gem_wheel = $GemWheel
 
-var _tmp_start_pos: Vector2
+var _tmp_start_pos = Vector2.ZERO
 
 func _ready():
 	_set_spell(Spells.NONE)
 	_anim.play("idle")
+	_tmp_start_pos = position
 
 	# TODO: Let client / server create player and set its controller
 	$PlayerController.player = self
@@ -112,3 +113,17 @@ func _on_GemWheel_spell_selected(spell):
 func _set_spell(spell: Spell):
 	selected_spell = spell
 	_player_sprite.get_material().set_shader_param("color_modulate", spell.color)
+
+
+func reset():
+	vel = Vector2.ZERO
+	position = _tmp_start_pos
+	next_state = State.IDLE
+	set_collision_mask_bit(Layers.PLATFORMS, true)
+
+func _on_VisibilityNotifier2D_viewport_exited(viewport):
+	# TODO: I'd like to move network logic into the controllers if possible
+	# TODO: Helper util function because Godot's network API is not smart when
+	#  there's no peer?
+	if get_tree().network_peer == null || is_network_master():
+		reset()

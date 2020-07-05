@@ -15,21 +15,12 @@ var SLOPE_THRESHOLD = deg2rad(46)
 var DEFAULT_SNAP_VECTOR = Vector2.DOWN * 40.0 # Make sure we snip hard if walking down sleep slopes
 var _snap_vector = DEFAULT_SNAP_VECTOR
 
-var _tmp_start_pos = Vector2.ZERO
-
 onready var _jump_timer = $JumpTimer
-
-func set_player(value: Player):
-	.set_player(value)
-	_tmp_start_pos = player.position
 
 func _process(delta):
 	# TODO: Delete this, it's debug code only
-	if Input.is_action_pressed("ui_cancel") or player.position.y > 500:
-		player.vel = Vector2.ZERO
-		player.position = _tmp_start_pos
-		player.next_state = Player.State.IDLE
-		player.set_collision_mask_bit(Layers.PLATFORMS, true)
+	if Input.is_action_pressed("ui_cancel"):
+		player.reset()
 
 func _physics_process(delta):
 	if player.state != Player.State.CLIMBING:
