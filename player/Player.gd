@@ -39,9 +39,6 @@ func _ready():
 	_anim.play("idle")
 	_tmp_start_pos = position
 
-	# TODO: Let client / server create player and set its controller
-	$PlayerController.player = self
-
 func _process(_delta):
 	if state != next_state:
 		if next_state == State.IDLE:

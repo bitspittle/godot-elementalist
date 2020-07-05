@@ -48,6 +48,11 @@ _global_script_classes=[ {
 "class": "Spell",
 "language": "GDScript",
 "path": "res://mana/spells/Spell.gd"
+}, {
+"base": "Node2D",
+"class": "Stage",
+"language": "GDScript",
+"path": "res://stages/Stage.gd"
 } ]
 _global_script_class_icons={
 "CmdLineArgs": "",
@@ -57,7 +62,8 @@ _global_script_class_icons={
 "PlayerController": "",
 "PlayerControllerLocal": "",
 "PlayerControllerRemote": "",
-"Spell": ""
+"Spell": "",
+"Stage": ""
 }
 
 [application]

@@ -2,9 +2,16 @@ extends Node
 
 var _server: WebSocketServer = null
 var _clients = {}
+var _stage: Stage = null
 
-func _ready():
-	var port = NetworkGlobals.PORT
+var _stage_scene = preload("res://stages/Stage.tscn")
+var _player_scene = preload("res://player/Player.tscn")
+
+func start():
+	var port = CmdLineArgs.get_int_value("--port")
+	if port == 0:
+		port = NetworkGlobals.PORT
+
 	print("Server will listen on port: ", port)
 
 	get_tree().connect("network_peer_connected", self, "_peer_connected")
@@ -22,7 +29,23 @@ func _process(delta):
 func _peer_connected(id):
 	print("Connected: ", id)
 	_clients[id] = null
+	if _clients.size() == 1:
+		_stage = _stage_scene.instance()
+		get_parent().add_child(_stage)
+
+	var players = _stage.players
+	var player = _player_scene.instance()
+	player.name += id
+	players.add_child(player)
 
 func _peer_disconnected(id):
 	print("Disconnected: ", id)
 	_clients.erase(id)
+
+	for player in _stage.players:
+		if player.name.ends_with(id):
+			player.queue_free()
+
+	if _clients.size() == 0:
+		_stage.queue_free()
+		_stage = null

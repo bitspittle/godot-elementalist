@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/fonts/font_square_medium.tres" type="DynamicFont" id=1]
 [ext_resource path="res://network/client/MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://assets/fonts/font_square_large.tres" type="DynamicFont" id=3]
-[ext_resource path="res://network/client/Client.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Theme" id=1]
 
@@ -80,8 +79,6 @@ text = "Join Server"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="Client" parent="." instance=ExtResource( 4 )]
 [connection signal="pressed" from="LocalButton" to="." method="_on_SinglePlayerButton_pressed"]
 [connection signal="text_changed" from="NameEdit" to="." method="_on_NameEdit_text_changed"]
 [connection signal="pressed" from="RemoteButton" to="." method="_on_MultiplayerButton_pressed"]
