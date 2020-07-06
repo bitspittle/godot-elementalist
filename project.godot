@@ -71,6 +71,7 @@ _global_script_class_icons={
 config/name="Elementalist"
 run/main_scene="res://EntryPoint.tscn"
 config/icon="res://assets/images/icon.png"
+config/icon.server="res://assets/images/icon-server.png"
 
 [autoload]
 
@@ -87,6 +88,11 @@ window/size/test_width=1280
 window/size/test_height=960
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
+
+[editor]
+
+convert_text_resources_to_binary_on_export=true
+main_run_args.server="--server"
 
 [importer_defaults]
 
