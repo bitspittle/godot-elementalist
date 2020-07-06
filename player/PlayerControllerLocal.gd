@@ -37,14 +37,16 @@ func _process(delta):
 			rpc("set_spell_index", player.gem_wheel.spells.find(player.selected_spell))
 			_last_spell = player.selected_spell
 
-
+var _physics_data = NetworkDict.new()
 func _physics_process(delta):
 	if player.state != Player.State.CLIMBING:
 		_physics_process_walking(delta)
 	else:
 		_physics_process_climbing(delta)
 
-	rpc_unreliable("set_physics", player.position, player.vel)
+	_physics_data.values["pos"] = player.position
+	_physics_data.values["vel"] = player.vel
+	_physics_data.rpc_unreliable(self, "set_physics")
 
 func _physics_process_walking(delta):
 	var x_input = 0
