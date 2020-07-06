@@ -22,6 +22,9 @@ var _last_state = Player.State.IDLE
 var _last_spell = Spells.NONE
 
 func _process(delta):
+	if !player.camera.current:
+		player.camera.make_current()
+
 	# TODO: Delete this, it's debug code only
 	if Input.is_action_pressed("ui_cancel"):
 		player.reset()

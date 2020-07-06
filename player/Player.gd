@@ -22,6 +22,7 @@ var state = State.IDLE
 var next_state = State.IDLE
 var selected_spell: Spell
 onready var gem_wheel: GemWheel = $GemWheel
+onready var camera: Camera2D = $Pivot/Camera2D
 # End controller
 
 var _prev_state = State.IDLE

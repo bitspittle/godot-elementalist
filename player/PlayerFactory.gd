@@ -12,8 +12,8 @@ func new_player(id: int = 0, is_local = true) -> Player:
 	else:
 		controller = _controller_remote_scene.instance()
 	controller.name = "PlayerController"
-
 	controller.player = player
+
 	if get_tree().network_peer != null:
 		controller.set_network_master(id)
 
