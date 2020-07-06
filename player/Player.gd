@@ -106,6 +106,7 @@ func _on_GemWheel_opening():
 		next_state = State.IDLE
 
 func _on_GemWheel_spell_selected(spell):
+	print(gem_wheel.get_path(), " selected")
 	set_spell(spell)
 
 func set_spell(spell: Spell):

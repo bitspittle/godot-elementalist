@@ -17,6 +17,7 @@ puppet func set_next_state(value):
 	player.next_state = value
 
 puppet func set_spell_index(index):
+	print(player.get_path(), " -> ", index)
 	if index >= 0:
 		player.set_spell(player.gem_wheel.spells[index])
 	else:

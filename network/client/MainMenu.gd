@@ -34,8 +34,6 @@ func _on_Stage_ready(stage):
 	stage.players.add_child(player)
 	self.queue_free()
 
-
-
 func _on_MultiplayerButton_pressed():
 	var ip = CmdLineArgs.get_str_value("--ip")
 	var port = CmdLineArgs.get_int_value("--port")

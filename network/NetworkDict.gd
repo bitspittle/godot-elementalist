@@ -13,22 +13,25 @@
 
 class_name NetworkDict
 
-var throttle_msec = 0
+
+# Default throttle for unreliable messages, a value which tries to balance
+# fast enough updates while also allowing the network to rest a bit.
+var throttle_msec = 100
 var timestamp = 0
 var values = {}
 var last_values = {}
 
 func rpc(target: Node, method: String) -> void:
-	if _pre_send():
+	if _pre_send(true):
 		target.rpc(method, [timestamp, values])
 
 func rpc_unreliable(target: Node, method: String) -> void:
-	if _pre_send():
+	if _pre_send(false):
 		target.rpc_unreliable(method, [timestamp, values])
 
-func _pre_send() -> bool:
+func _pre_send(reliable: bool) -> bool:
 	var new_timestamp = OS.get_ticks_msec()
-	if (new_timestamp - timestamp) < throttle_msec:
+	if !reliable && (new_timestamp - timestamp) < throttle_msec:
 		return false
 
 	timestamp = new_timestamp
@@ -46,7 +49,5 @@ func update(other) -> bool:
 		values = other_values
 		last_values = values
 		return true
-	else:
-		print("OUT OF ORDER")
 
 	return false

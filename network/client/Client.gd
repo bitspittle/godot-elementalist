@@ -56,17 +56,20 @@ func _server_disconnected():
 
 func _peer_connected(id):
 	print("Connected: ", id)
-
 	if id > 1:
-		var player = PlayerFactory.new_player(id, false)
-		var players = _stage.players
-		_stage.add_child(player)
+		rpc_id(id, "register_player")
 
 func _peer_disconnected(id):
 	print("Disconnected: ", id)
 
 	if id > 1:
-		for player in _stage.players:
+		for player in _stage.players.get_children():
 			if player.name.ends_with(id):
 				player.queue_free()
 				return
+
+remote func register_player():
+	var id = get_tree().get_rpc_sender_id()
+	print("Remote adding ", id)
+	_add_player_to_stage(_stage, PlayerFactory.new_player(id, false))
+
