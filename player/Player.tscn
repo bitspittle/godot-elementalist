@@ -2,11 +2,11 @@
 
 [ext_resource path="res://assets/images/player.png" type="Texture" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
-[ext_resource path="res://effects/TimeEffect.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mana/GemWheel.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/shaders/module_range.shader" type="Shader" id=5]
+[ext_resource path="res://network/SyncDict.gd" type="Script" id=6]
 
-[sub_resource type="ShaderMaterial" id=15]
+[sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
 shader = ExtResource( 5 )
 shader_param/color_range_start = Vector3( 0.3, 0.3, 0.3 )
@@ -330,10 +330,23 @@ collision_layer = 4
 collision_mask = 11
 script = ExtResource( 2 )
 
+[node name="Sync" type="Node" parent="."]
+
+[node name="PosVel" type="Node" parent="Sync"]
+script = ExtResource( 6 )
+
+[node name="State" type="Node" parent="Sync"]
+script = ExtResource( 6 )
+reliable = true
+
+[node name="SpellIndex" type="Node" parent="Sync"]
+script = ExtResource( 6 )
+reliable = true
+
 [node name="Pivot" type="Position2D" parent="."]
 
 [node name="PlayerSprite" type="Sprite" parent="Pivot"]
-material = SubResource( 15 )
+material = SubResource( 1 )
 position = Vector2( 8.82338, -10.2363 )
 texture = ExtResource( 1 )
 vframes = 11
@@ -373,12 +386,17 @@ anims/squat = SubResource( 12 )
 anims/walk = SubResource( 13 )
 anims/windup = SubResource( 14 )
 
-[node name="TimeEffect" parent="." instance=ExtResource( 3 )]
-
 [node name="GemWheel" parent="." instance=ExtResource( 4 )]
 pause_mode = 2
 
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+[node name="JumpTimer" type="Timer" parent="."]
+wait_time = 0.35
+one_shot = true
+[connection signal="vaules_changed" from="Sync/PosVel" to="." method="_on_PosVel_vaules_changed"]
+[connection signal="vaules_changed" from="Sync/State" to="." method="_on_State_vaules_changed"]
+[connection signal="vaules_changed" from="Sync/SpellIndex" to="." method="_on_SpellIndex_vaules_changed"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 [connection signal="spell_selected" from="GemWheel" to="." method="_on_GemWheel_spell_selected"]
 [connection signal="viewport_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_viewport_exited"]

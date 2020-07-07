@@ -20,9 +20,9 @@ _global_script_classes=[ {
 "path": "res://mana/GemWheel.gd"
 }, {
 "base": "Reference",
-"class": "NetworkDict",
+"class": "NetUtils",
 "language": "GDScript",
-"path": "res://network/NetworkDict.gd"
+"path": "res://network/NetUtils.gd"
 }, {
 "base": "Control",
 "class": "PercentBar",
@@ -34,21 +34,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://player/Player.gd"
 }, {
-"base": "Node",
-"class": "PlayerController",
-"language": "GDScript",
-"path": "res://player/PlayerController.gd"
-}, {
-"base": "PlayerController",
-"class": "PlayerControllerLocal",
-"language": "GDScript",
-"path": "res://player/PlayerControllerLocal.gd"
-}, {
-"base": "PlayerController",
-"class": "PlayerControllerRemote",
-"language": "GDScript",
-"path": "res://player/PlayerControllerRemote.gd"
-}, {
 "base": "Reference",
 "class": "Spell",
 "language": "GDScript",
@@ -58,18 +43,21 @@ _global_script_classes=[ {
 "class": "Stage",
 "language": "GDScript",
 "path": "res://stages/Stage.gd"
+}, {
+"base": "Node",
+"class": "SyncDict",
+"language": "GDScript",
+"path": "res://network/SyncDict.gd"
 } ]
 _global_script_class_icons={
 "CmdLineArgs": "",
 "GemWheel": "",
-"NetworkDict": "",
+"NetUtils": "",
 "PercentBar": "",
 "Player": "",
-"PlayerController": "",
-"PlayerControllerLocal": "",
-"PlayerControllerRemote": "",
 "Spell": "",
-"Stage": ""
+"Stage": "",
+"SyncDict": ""
 }
 
 [application]
@@ -81,7 +69,7 @@ config/icon.server="res://assets/images/icon-server.png"
 
 [autoload]
 
-NetworkGlobals="*res://network/NetworkGlobals.gd"
+NetGlobals="*res://network/NetGlobals.gd"
 Layers="*res://engine/Layers.gd"
 Spells="*res://mana/spells/Spells.gd"
 PlayerFactory="*res://player/PlayerFactory.gd"

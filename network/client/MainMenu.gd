@@ -6,15 +6,12 @@ onready var _remote_button = $RemoteButton
 
 var _client_scene = preload("res://network/client/Client.tscn")
 var _stage_scene = preload("res://stages/Stage.tscn")
-var _player_scene = preload("res://player/Player.tscn")
-var _local_controller_scene = preload("res://player/PlayerControllerLocal.tscn")
 
 func _ready():
 	_name_edit.text = ""
 	_update_connect_enabled()
 	_local_button.grab_focus()
 	get_tree().connect("connected_to_server", self, "_connected_success")
-
 
 func _on_NameEdit_text_changed(new_text):
 	_update_connect_enabled()
@@ -40,11 +37,11 @@ func _on_MultiplayerButton_pressed():
 
 	if ip == "":
 		if OS.is_debug_build():
-			ip = NetworkGlobals.LOCALHOST
+			ip = NetGlobals.LOCALHOST
 		else:
-			ip = NetworkGlobals.SERVER_IP
+			ip = NetGlobals.SERVER_IP
 	if port == 0:
-		port = NetworkGlobals.PORT
+		port = NetGlobals.PORT
 
 	var client = _client_scene.instance()
 	get_tree().get_root().add_child(client)

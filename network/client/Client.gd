@@ -35,7 +35,7 @@ func _connected_success():
 	print("Connection successful")
 	_stage = _stage_scene.instance()
 	var id = get_tree().get_network_unique_id()
-	_stage.connect("ready", self, "_add_player_to_stage", [_stage, PlayerFactory.new_player(id, true)])
+	_stage.connect("ready", self, "_add_player_to_stage", [_stage, PlayerFactory.new_player(id)])
 	get_tree().get_root().add_child(_stage)
 
 func _add_player_to_stage(stage, player):
@@ -56,13 +56,13 @@ func _server_disconnected():
 
 func _peer_connected(id):
 	print("Connected: ", id)
-	if id > 1:
+	if id != NetGlobals.SERVER_ID:
 		rpc_id(id, "register_player")
 
 func _peer_disconnected(id):
 	print("Disconnected: ", id)
 
-	if id > 1:
+	if id != NetGlobals.SERVER_ID:
 		for player in _stage.players.get_children():
 			if player.name.ends_with(id):
 				player.queue_free()
@@ -71,5 +71,5 @@ func _peer_disconnected(id):
 remote func register_player():
 	var id = get_tree().get_rpc_sender_id()
 	print("Remote adding ", id)
-	_add_player_to_stage(_stage, PlayerFactory.new_player(id, false))
+	_add_player_to_stage(_stage, PlayerFactory.new_player(id))
 

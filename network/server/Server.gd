@@ -9,7 +9,7 @@ var _stage_scene = preload("res://stages/Stage.tscn")
 func _ready():
 	var port = CmdLineArgs.get_int_value("--port")
 	if port == 0:
-		port = NetworkGlobals.PORT
+		port = NetGlobals.PORT
 
 	print("Server will listen on port: ", port)
 
@@ -33,7 +33,7 @@ func _peer_connected(id):
 		get_tree().get_root().add_child(_stage)
 	_clients[id] = null
 
-	var player = PlayerFactory.new_player(id, false)
+	var player = PlayerFactory.new_player(id)
 	if _stage.is_inside_tree():
 		_add_player_to_stage(_stage, player)
 	else:
