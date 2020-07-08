@@ -61,6 +61,7 @@ func _ready():
 	_anim.play("idle")
 	_tmp_start_pos = position
 
+	_name_label.text = ""
 	if NetUtils.is_master_or_local(self):
 		_camera.make_current()
 		_name_label.text = player_name

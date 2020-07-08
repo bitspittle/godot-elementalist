@@ -10,7 +10,7 @@ static func is_master_or_local(node: Node):
 	return is_local(node) || node.is_network_master()
 
 static func is_master(node: Node) -> bool:
-	return is_networked(node) || node.is_network_master()
+	return is_networked(node) && node.is_network_master()
 
 static func is_puppet(node: Node) -> bool:
 	return is_networked(node) && !node.is_network_master()
