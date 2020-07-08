@@ -28,6 +28,8 @@ enum State {
 	CLIMBING,
 }
 
+var player_name = ""
+
 var _selected_spell: Spell
 
 var _vel = Vector2.ZERO
@@ -45,9 +47,12 @@ onready var _anim: AnimationPlayer = $AnimationPlayer
 onready var _camera: Camera2D = $Pivot/Camera2D
 onready var _jump_timer = $JumpTimer
 
+onready var _sync_name = $Sync/PlayerName
 onready var _sync_posvel = $Sync/PosVel
 onready var _sync_state = $Sync/State
 onready var _sync_spell = $Sync/SpellIndex
+
+onready var _name_label = $PlayerNameLabel
 
 var _tmp_start_pos = Vector2.ZERO
 
@@ -58,6 +63,8 @@ func _ready():
 
 	if NetUtils.is_master_or_local(self):
 		_camera.make_current()
+		_name_label.text = player_name
+		_sync_name.value = player_name
 
 func _process(_delta):
 	if _state != _next_state:
@@ -269,3 +276,6 @@ func _on_SpellIndex_vaules_changed():
 		set_spell(_gem_wheel.spells[index])
 	else:
 		set_spell(Spells.NONE)
+
+func _on_PlayerName_vaules_changed():
+	_name_label.text = _sync_name.value

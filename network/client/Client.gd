@@ -4,6 +4,7 @@ var _client: WebSocketClient = null
 
 var _stage_scene = preload("res://stages/Stage.tscn")
 var _stage: Stage = null
+var _name = ""
 
 func _ready():
 	get_tree().connect("connected_to_server", self, "_connected_success")
@@ -12,7 +13,8 @@ func _ready():
 	get_tree().connect("network_peer_connected", self, "_peer_connected")
 	get_tree().connect("network_peer_disconnected", self, "_peer_disconnected")
 
-func connect_to_server(ip: String, port: int) -> void:
+func connect_to_server(ip: String, port: int, name: String) -> void:
+	_name = name
 	_client = WebSocketClient.new()
 
 	var prefix = "ws://"
@@ -35,7 +37,7 @@ func _connected_success():
 	print("Connection successful")
 	_stage = _stage_scene.instance()
 	var id = get_tree().get_network_unique_id()
-	_stage.connect("ready", self, "_add_player_to_stage", [_stage, PlayerFactory.new_player(id)])
+	_stage.connect("ready", self, "_add_player_to_stage", [_stage, PlayerFactory.new_player(id, _name)])
 	get_tree().get_root().add_child(_stage)
 
 func _add_player_to_stage(stage, player):

@@ -45,7 +45,7 @@ func _on_MultiplayerButton_pressed():
 
 	var client = _client_scene.instance()
 	get_tree().get_root().add_child(client)
-	client.connect_to_server(ip, port)
+	client.connect_to_server(ip, port, _name_edit.text)
 
 func _connected_success():
 	self.queue_free()
