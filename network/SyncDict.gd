@@ -29,7 +29,6 @@ var values = {}
 # Convenient shorthand for syncdicts that only contain a single value
 var value = null setget _set_value, _get_value
 
-var _new_peers = []
 var _timestamp = 0
 var _last_values = {}
 var _remaining_msec = 0.0
@@ -41,19 +40,15 @@ func _get_value():
 	return self.values["_"]
 
 func _ready():
-	get_tree().connect("network_peer_connected", self, "_peer_connected")
+	if NetUtils.is_puppet(self):
+		rpc_id(NetUtils.get_master_id(self), "_initial_request_from", NetUtils.get_unique_id(self))
 
-func _peer_connected(id):
-	_new_peers.append(id)
+master func _initial_request_from(id):
+	rpc_id(id, "_receive", _create_payload())
 
 func _process(delta):
 	if values.empty() || !NetUtils.is_master(self):
 		return
-
-	if !_new_peers.empty():
-		for id in _new_peers:
-			rpc_id(id, "_receive", _create_payload())
-		_new_peers.clear()
 
 	if reliable:
 		if _last_values.hash() != values.hash():

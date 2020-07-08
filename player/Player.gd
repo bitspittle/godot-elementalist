@@ -56,7 +56,7 @@ func _ready():
 	_anim.play("idle")
 	_tmp_start_pos = position
 
-	if NetUtils.is_master(self):
+	if NetUtils.is_master_or_local(self):
 		_camera.make_current()
 
 func _process(_delta):
@@ -115,7 +115,7 @@ func _physics_process(delta):
 	if (_vel.x != 0):
 		_pivot.scale.x = sign(_vel.x)
 
-	if NetUtils.is_master(self):
+	if NetUtils.is_master_or_local(self):
 		if _state != State.CLIMBING:
 			_physics_process_walking(delta)
 		else:
@@ -253,7 +253,7 @@ func _reset():
 	set_collision_mask_bit(Layers.PLATFORMS, true)
 
 func _on_VisibilityNotifier2D_viewport_exited(viewport):
-	if NetUtils.is_master(self):
+	if NetUtils.is_master_or_local(self):
 		_reset()
 
 func _on_PosVel_vaules_changed():

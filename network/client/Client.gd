@@ -70,6 +70,6 @@ func _peer_disconnected(id):
 
 remote func register_player():
 	var id = get_tree().get_rpc_sender_id()
-	print("Registering ", id)
+	print("Registering other client: ", id)
 	_add_player_to_stage(_stage, PlayerFactory.new_player(id))
 
