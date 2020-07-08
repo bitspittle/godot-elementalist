@@ -265,7 +265,6 @@ func _on_State_vaules_changed():
 
 func _on_SpellIndex_vaules_changed():
 	var index = _sync_spell.value
-	print("Got here with index: ", index)
 	if index >= 0:
 		set_spell(_gem_wheel.spells[index])
 	else:
